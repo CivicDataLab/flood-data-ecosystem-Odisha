@@ -1,0 +1,479 @@
+id,name,health_centres_count
+relation/10091503,Bahalda,16
+relation/10091504,Tiring,30
+relation/10091539,Badampahar,20
+relation/10091540,Rairangpur,25
+relation/10091541,Rairangpur Town,5
+relation/10091542,Jamda,15
+relation/10091640,Ghagarbeda,10
+relation/10091641,Raruan,20
+relation/10091642,Jashipur,34
+relation/10091643,Gorumahisani,20
+relation/10091644,Bisoi,22
+relation/10091699,Thakurmunda,13
+relation/10091700,Karanjia,25
+relation/10092482,Baisinga,32
+relation/10092483,Rasagobindapur,28
+relation/10092484,Betanati,25
+relation/10092485,Barsahi,38
+relation/10092486,Khunta,40
+relation/10092487,Muruda,21
+relation/10092488,Suliapada,26
+relation/10092489,Chandua,21
+relation/10092490,Koliana,24
+relation/10092491,Bangiriposi,29
+relation/10092492,Jharpokharia,30
+relation/10092493,Baripada (M),1
+relation/10092494,Baripada Town,2
+relation/10092495,Baripada Sadar,30
+relation/10092496,Udala,28
+relation/10092497,Kaptipada,22
+relation/10092498,Sharata,18
+relation/10092499,Mahuldiha,15
+relation/10093118,Raibania,14
+relation/10093130,Jaleswar,23
+relation/10093221,Basta,22
+relation/10093222,Rupsa,4
+relation/10093223,Singla,23
+relation/10093224,Baliapal,27
+relation/10093225,Bhograi,26
+relation/10093226,Kamarda,15
+relation/10093627,Remuna,12
+relation/10093628,Bampada,2
+relation/10093629,Sahadevkhunta,1
+relation/10093630,Chandipur,2
+relation/10093631,Baleshwar (M),1
+relation/10093632,Baleshwar Sadar,31
+relation/10093633,Balaramgadi Marine,1
+relation/10093725,Similia,27
+relation/10093726,Khaira,24
+relation/10093727,Oupada,9
+relation/10093728,Berhampur,17
+relation/10093729,Soro,45
+relation/10093730,Nilagiri,29
+relation/10095628,Joda,7
+relation/10095629,Barbil,3
+relation/10095630,Rugudi,4
+relation/10095631,Bolani,4
+relation/10095669,Champua,31
+relation/10095791,Nayakote,13
+relation/10095792,Bamebari,16
+relation/10095924,Baria,25
+relation/10095925,Jhumpura,12
+relation/10096359,Turumunga,25
+relation/10096360,Kanjipani,6
+relation/10096361,Kendujhar Town,5
+relation/10096363,Kendujhar Sadar,45
+relation/10096420,Patana,30
+relation/10097234,Telkoi,31
+relation/10097235,Pandapara,20
+relation/10097236,Ghatgaon,26
+relation/10097307,Nandipada,17
+relation/10097308,Soso,11
+relation/10097309,Anandapur,18
+relation/10097310,Ghasipura,23
+relation/10097311,Daitari,8
+relation/10097312,Harichandanpur,25
+relation/10098001,Dhamara Marine,1
+relation/10098002,Bansada,17
+relation/10098003,Chandabali,19
+relation/10098004,Tihidi,30
+relation/10098005,Naikanidihi,14
+relation/10098006,Basudebpur,23
+relation/10098007,Dhusuri,24
+relation/10098008,Dhamanagar,18
+relation/10098009,Bhandari Pokhari,23
+relation/10098010,Bhadrak Rural,40
+relation/10098011,Bant,12
+relation/10098012,Agarpada,9
+relation/10098511,Bari - Ramachandrapur,24
+relation/10098512,Binjharpur,41
+relation/10098513,Mangalpur,33
+relation/10098514,Jajapur,18
+relation/10098515,Jajpur Sadar,25
+relation/10098516,Balichandrapur,18
+relation/10098517,Badachana,29
+relation/10098518,Dharmasala,28
+relation/10098519,Kuakhia,19
+relation/10098520,Panikoili,12
+relation/10098521,Korai,19
+relation/10098522,Jajapur Road,7
+relation/10098523,Jenapur,17
+relation/10098524,Jakhapura,5
+relation/10098525,Kalinganagar,10
+relation/10098526,Sukinda,15
+relation/10098527,Tomka,7
+relation/10098528,Kaliapani,5
+relation/10098771,Hemgir,26
+relation/10098772,Lephripara,27
+relation/10098773,Kinjirkela,22
+relation/10098774,Talasara,31
+relation/10099085,Rajagangapur,31
+relation/10099086,Raiboga,14
+relation/10099087,Kutra,22
+relation/10099088,Baragaon,24
+relation/10099089,Dharuadihi,11
+relation/10099090,Sundargarh,22
+relation/10099091,Sundargarh Town,1
+relation/10099092,Bhasma,18
+relation/10100604,Koida,12
+relation/10100605,Kamarposh Balang,11
+relation/10100606,Chandiposh,8
+relation/10100607,Biramitrapur,18
+relation/10100608,Hatibari,16
+relation/10100609,Bisra,34
+relation/10100610,Bondamunda,1
+relation/10100611,Lathikata,11
+relation/10100612,Tangarapali,2
+relation/10100613,Raghunathapali,5
+relation/10100614,Raurkela (M),1
+relation/10100615,Rourkela,1
+relation/10100616,Brahmani Tarang,19
+relation/10100694,Mahulapada,8
+relation/10100695,Lahunipara,25
+relation/10100696,Banei,17
+relation/10100697,Tikaetpali,9
+relation/10100698,Gurundia,15
+relation/10102953,Reamal,15
+relation/10102954,Kundheigola,13
+relation/10102955,Barkot,11
+relation/10102956,Debagarh,14
+relation/10103478,Bantala,14
+relation/10103479,Purunakot,11
+relation/10103480,Thakurgarh,9
+relation/10103481,Athmallik,11
+relation/10103482,Kiakata,2
+relation/10103483,Kishorenagar,12
+relation/10103484,Handapa,8
+relation/10103485,Jarapada,10
+relation/10103486,Chhendipada,19
+relation/10103487,Industrial,4
+relation/10103488,Banarpal,13
+relation/10103489,NALCO,3
+relation/10103490,Anugul,14
+relation/10103491,Colliery,11
+relation/10103492,Bikrampur,5
+relation/10103493,Talcher Sadar,12
+relation/10103494,Samal Barrage,6
+relation/10103495,N.T.P.C.,3
+relation/10103496,Kaniha,6
+relation/10103497,Rengali Damsite,8
+relation/10103498,Khamar,11
+relation/10103499,Palalahada,16
+relation/10103705,Dhenkanal Sadar,38
+relation/10103706,Rasol,13
+relation/10103707,Hindol,8
+relation/10103708,Motunga,12
+relation/10103709,Balimi,8
+relation/10103710,Bhusan Steel Limited,4
+relation/10103711,Tumusingha,13
+relation/10103712,Gandia,22
+relation/10103713,Nihalprasad,10
+relation/10103714,Bhuban,14
+relation/10103715,Kamakshyanagar,19
+relation/10103716,Parajang,34
+relation/10103717,Kankadahad,11
+relation/10104745,Laikera,24
+relation/10104746,Kolabira,6
+relation/10104747,Jharsuguda,5
+relation/10104748,Badmal,6
+relation/10104749,Orient,1
+relation/10104750,Brajarajnagar,7
+relation/10104751,Belpahar,1
+relation/10104752,Banaharapali,7
+relation/10104753,Lakhanpur,9
+relation/10104754,Rengali,14
+relation/10104933,Kisinda,4
+relation/10104934,Naktideul,8
+relation/10104935,Rairakhol,6
+relation/10104936,Charamal,8
+relation/10104937,Jujomura,14
+relation/10104938,Dhama,9
+relation/10104939,Burla,5
+relation/10104940,Hirakud,1
+relation/10104941,Sadar,4
+relation/10104942,Dhanupali,1
+relation/10104943,Sambalpur,1
+relation/10104944,Ainthapali,1
+relation/10104945,Sasan,18
+relation/10104946,Rengali,3
+relation/10104947,Katarbaga,10
+relation/10104948,Jamankira,23
+relation/10104949,Kochinda,23
+relation/10104950,Mahulpalli,33
+relation/10104951,Govindpur,21
+relation/10104984,Thelkoloi,5
+relation/10105553,Bhatli,18
+relation/10105554,Bargarh,12
+relation/10105555,Bargarh Sadar,16
+relation/10105556,Sohela,19
+relation/10105557,Paikamal,16
+relation/10105558,Gaisilet,15
+relation/10105559,Burden P.S.,7
+relation/10105561,Jharbandha,21
+relation/10105562,Padmapur,11
+relation/10105563,Melchhamunda,13
+relation/10105564,Bijepur,18
+relation/10105565,Barapali,23
+relation/10105566,Bheden,27
+relation/10105567,Attabira,27
+relation/10105568,Ambabhona,15
+relation/10105754,Athagad,17
+relation/10105755,Banki,33
+relation/10105756,Tigiria,17
+relation/10105757,Baidyeswar,11
+relation/10105758,Badamba,31
+relation/10105759,Kanpur,12
+relation/10105760,Narasinghpur,21
+relation/10105847,Choudwar,14
+relation/10105848,Gurudijhatia,6
+relation/10105849,Khuntuni,9
+relation/10105893,Tangi,14
+relation/10105894,Jagatpur,10
+relation/10105895,Cuttack Sadar,25
+relation/10105896,Cuttack (M.Corp.) P.S,1
+relation/10105897,C.R.R.I.,1
+relation/10106023,Niali,31
+relation/10106024,Gobindpur,14
+relation/10106025,Olatapur,4
+relation/10106026,Kandarpur,7
+relation/10106027,Kishannagar,6
+relation/10106028,Nemalo,18
+relation/10106029,Nischintakoili,13
+relation/10106030,Mahanga,37
+relation/10106031,Salepur,33
+relation/10106198,Mahakalapada,21
+relation/10106199,Marsaghai,20
+relation/10106200,Patkura,38
+relation/10106201,Kendrapara Sadar,30
+relation/10106202,Kendrapara,1
+relation/10106203,Derabish,15
+relation/10106204,Nikirai,15
+relation/10106205,Pattamundai,43
+relation/10106206,Aali,30
+relation/10106207,Rajkanika,29
+relation/10106209,Rajnagar,30
+relation/10106210,Jamboo Marine,7
+relation/10106300,Abhyachandpur,2
+relation/10106301,Paradip,1
+relation/10106302,Paradeep Lock,8
+relation/10106303,Kujang,21
+relation/10106304,Tirtol,53
+relation/10106305,Ersama,25
+relation/10106306,Balikuda,36
+relation/10106307,Naugaon,17
+relation/10106308,Jagatsinghapur,46
+relation/10106309,Biridi,17
+relation/10108005,Banapur,21
+relation/10108006,Balugaon,17
+relation/10108007,Tangi,27
+relation/10108008,Nirakarpur,9
+relation/10108009,Jankia,19
+relation/10108010,Bolagad,19
+relation/10108011,Begunia,26
+relation/10108012,Khordha Sadar,11
+relation/10108013,Khordha,21
+relation/10108014,Jatani,10
+relation/10108015,Tamando,2
+relation/10108016,LINGARAJ,1
+relation/10108017,Airfield (Kapila Prasad),2
+relation/10108018,Khandagiri,1
+relation/10108019,Uttara P.S,3
+relation/10108020,Balianta,20
+relation/10108021,Balipatna,26
+relation/10108022,Saheednagar,1
+relation/10108023,Bhubaneswar (M.Corp.),2
+relation/10108025,Mancheswar,2
+relation/10108026,Nandankanan,2
+relation/10108027,Chandaka,11
+relation/10108129,Barang,10
+relation/10108740,Konark,10
+relation/10108741,Ramachandi,4
+relation/10108742,Astaranga,14
+relation/10108743,Kakatpur,17
+relation/10108744,Gop,28
+relation/10108745,Nimapada,38
+relation/10108746,Pipili,30
+relation/10108747,Delanga,25
+relation/10108748,Puri (M),1
+relation/10108749,Sadar,18
+relation/10108750,Chandanpur,18
+relation/10108751,Satyabadi,40
+relation/10108752,Gadisagada,17
+relation/10108753,Brahmagiri,23
+relation/10108755,Krushna Prasad,12
+relation/10109370,Banigochha,8
+relation/10109371,Gania,12
+relation/10109372,Dasapalla,13
+relation/10109373,Nuagaon,9
+relation/10109374,Fategarh,25
+relation/10109375,Khandapada,21
+relation/10109376,Itamati,14
+relation/10109377,Nayagarh,6
+relation/10109378,Nayagarh Sadar,10
+relation/10109379,Odagaon,25
+relation/10109383,Sarankul,27
+relation/10109384,Ranapur,31
+relation/10109935,Harbhanga,10
+relation/10109936,Puruna Katak,8
+relation/10109937,Baunsuni,5
+relation/10109938,Baudh Sadar,26
+relation/10109939,Manamunda,18
+relation/10109940,Kantamal,16
+relation/10110118,Sonapur,6
+relation/10110119,Tarbha,20
+relation/10110120,Dunguripali,25
+relation/10110121,Rampur,8
+relation/10110122,Binika,17
+relation/10110123,Ulunda,9
+relation/10110124,Biramaharajpur,19
+relation/10110125,Subalaya,8
+relation/10110302,Patnagarh,29
+relation/10110303,Khaprakhol,22
+relation/10110304,Belpara,21
+relation/10110305,Turekela,12
+relation/10110306,Kantabanji,9
+relation/10110307,Bangomunda,16
+relation/10110308,Sindhekela,16
+relation/10110309,Titlagarh,20
+relation/10110310,Saintala,28
+relation/10110311,Tushura,33
+relation/10110312,Balangir,42
+relation/10110313,Loisinga,30
+relation/10111292,Jonk,15
+relation/10111293,Nuapada,15
+relation/10111294,Komna,27
+relation/10111295,Khariar,20
+relation/10111296,Boden,17
+relation/10111297,Sinapali,20
+relation/10113992,Madanpur Rampur,31
+relation/10113993,Narala,23
+relation/10113994,Kesinga,24
+relation/10113995,Kegaon,22
+relation/10113996,Sadar,30
+relation/10113997,Biswanathpur,5
+relation/10113998,Lanjigarh,14
+relation/10113999,Junagarh,28
+relation/10114000,Golamunda,13
+relation/10114001,Dharamgarh,19
+relation/10114002,Kokasara,30
+relation/10114003,Jayapatna,38
+relation/10114004,Thuamul Rampur,21
+relation/10114723,Gochhapada,13
+relation/10114724,Phiringia,15
+relation/10114725,Tikabali,16
+relation/10114726,Sarangagarh,11
+relation/10114727,Nuagaon,6
+relation/10114728,Baliguda,28
+relation/10114729,Belaghar,8
+relation/10114730,Tumudibandha,8
+relation/10114731,Brahmanigaon,13
+relation/10114732,Kotagarh,14
+relation/10114733,Daringbadi,10
+relation/10114734,Raikia,16
+relation/10114735,G.Udayagiri,16
+relation/10114736,Chakapada,10
+relation/10114737,Khajuripada,14
+relation/10114738,Phulabani Town,1
+relation/10114739,Phulabani,14
+relation/10115621,Brahmapur (M.Corp.),1
+relation/10115622,Chamakhandi,9
+relation/10115623,Brahmapur Sadar,22
+relation/10115624,Gopalpur,9
+relation/10115625,Hinjili,28
+relation/10115626,Purusottampur,27
+relation/10115627,Ganjam,5
+relation/10115628,Chhatrapur,12
+relation/10115629,Rambha,13
+relation/10115630,Khalikote,20
+relation/10115631,Kodala,23
+relation/10115632,Kabisuryanagar,28
+relation/10115633,Asika,23
+relation/10115634,Polasara,20
+relation/10115635,Buguda,20
+relation/10115636,Bellaguntha,38
+relation/10115637,Golanthara,29
+relation/10115638,Ramagiri (Pt),3
+relation/10115639,Jarada,28
+relation/10115640,Nuagaon,20
+relation/10115641,Digapahandi,30
+relation/10115642,Seragad,13
+relation/10115643,Patapur,23
+relation/10115644,Dharakote,14
+relation/10115645,Badagada,24
+relation/10115646,Surada,15
+relation/10115647,Bhanjanagar,14
+relation/10115648,Jagannath Prasad,15
+relation/10115649,Tarasingi,22
+relation/10116364,Khatiguda,9
+relation/10116365,Tentulikhunti,23
+relation/10116366,Nabarangapur P.S,31
+relation/10116367,Paparahandi,26
+relation/10116368,Kodinga,33
+relation/10116369,Kosagumuda,28
+relation/10116370,Dabugan,42
+relation/10116371,Jharigan,22
+relation/10116372,Chandahandi,24
+relation/10116373,Umarkote,46
+relation/10116374,Raighar,35
+relation/10116375,Kundei,16
+relation/10116755,Doraguda,6
+relation/10116756,Andirakanch,4
+relation/10116758,Kashipur,20
+relation/10116759,Tikiri,13
+relation/10116760,Seskhal,18
+relation/10116761,Rayagada,48
+relation/10116762,Gunupur,31
+relation/10116763,Puttasing,14
+relation/10116764,Padmapur,16
+relation/10116765,Gudari,18
+relation/10116766,Chandrapur,10
+relation/10116767,Bishamakatak,30
+relation/10116768,Kalyanasingpur,22
+relation/10116769,Muniguda,14
+relation/10116770,Ambadala,16
+relation/10117114,Kashinagar,13
+relation/10117115,Serango,26
+relation/10117116,Paralakhemundi,7
+relation/10117117,Gurandi,13
+relation/10117118,Garabandha,15
+relation/10117119,Rayagada,13
+relation/10117120,Ramagiri,11
+relation/10117121,R.Udayagiri,27
+relation/10117122,Mohana,22
+relation/10117123,Adava,17
+relation/10117466,Pottangi,33
+relation/10117467,Kotiya,1
+relation/10117468,Similiguda,10
+relation/10117469,Narayanpatana,15
+relation/10117470,Bandhugaon,19
+relation/10117471,Kakiriguma,7
+relation/10117472,Lakshmipur,13
+relation/10117473,Dasamantapur,18
+relation/10117474,Bhairabsingipur,27
+relation/10117475,Boriguma,24
+relation/10117476,Damonjodi,4
+relation/10117477,Sunabeda,4
+relation/10117478,Koraput,26
+relation/10117479,Koraput Town,1
+relation/10117480,Nandapur,23
+relation/10117481,Padua,19
+relation/10117482,Machh kund,12
+relation/10117483,Boipariguda,38
+relation/10117484,Jeypore,24
+relation/10117485,Kundura,18
+relation/10117486,Kotpad,31
+relation/10117689,Jodamba,4
+relation/10117690,Paparmetla,6
+relation/10117691,Chitrakonda,9
+relation/10117692,Orkel,16
+relation/10117693,Mudulipada,14
+relation/10117694,Mathili,28
+relation/10117695,Malkangiri,42
+relation/10117696,Podia,11
+relation/10117697,Kalimela,16
+relation/10117698,M.V. 79,16
+relation/10117699,Motu,16
+relation/10118202,Arjyapalli Marine,1
+relation/10118219,Sainkul,15
+way/22062135,Abdul Kalam Island,1
