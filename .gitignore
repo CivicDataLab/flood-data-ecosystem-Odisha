@@ -3,6 +3,9 @@
 *.tif
 Waterlevel_assam_stations.csv
 MissionAntyodaya2020_Assam.xlsx
+
+bharatmaps_vil2017_odisha.geojson
+Odisha_antyodaya_village_dataset.xlsx
 *.zip
 
 #Don't ignore zip files in Map
