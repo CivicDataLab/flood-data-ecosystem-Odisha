@@ -35,7 +35,7 @@ for stationCode in list(stations_gdf.stationCode):
         df = df[["stationCode", "Date", "Time", "dataValue", "datatypeCode"]]
         master_df = pd.concat([master_df, df], ignore_index=True)
         master_df = master_df.drop_duplicates()
-        master_df.to_csv(path + "/data/processed_data.csv", index=False)
+        master_df.to_csv(path + "/data/scraped_data.csv", index=False)
     except:
         print("No data available in given time period at: ", stationCode)
         continue
