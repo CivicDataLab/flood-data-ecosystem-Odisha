@@ -4,10 +4,10 @@
 Waterlevel_assam_stations.csv
 MissionAntyodaya2020_Assam.xlsx
 scraped_data.csv
-
 bharatmaps_vil2017_odisha.geojson
 Odisha_antyodaya_village_dataset.xlsx
 *.zip
+*.grd
 
 #Don't ignore zip files in Map
 !Maps/*.zip
