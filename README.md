@@ -16,4 +16,21 @@ All content in this repository is licensed under
 [![GNU-AGPL](https://www.gnu.org/graphics/agplv3-155x51.png)](LICENSE.md)
 
 
+---
+
+
+## Procurement Datasets
+
+The repository includes scripts to extract and process various datasets essential for modeling flood risk in Himachal Pradesh. Below are some key datasets:
+
+### Flood Procurement Data
+- **[Flood Tenders Data](https://github.com/CivicDataLab/flood-data-ecosystem-odisha/tree/main/Sources/TENDERS/data/flood_tenders)**:
+  - Contains procurement data related to flood activities in Himachal Pradesh for the financial years 2019 to 2024.
+
+- **[Monthly Procurement Data](https://github.com/CivicDataLab/flood-data-ecosystem-odisha/tree/main/Sources/TENDERS/data/monthly_tenders)**:
+  - Contains monthly procurement data for Himachal Pradesh from FY 2019 to 2024.
+
+---
+
+
 If you want to contribute to the data sources, research or have any doubts with the data, please contact us at info@civicdatalab.in
