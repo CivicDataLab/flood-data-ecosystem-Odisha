@@ -9,7 +9,7 @@ We have developed a data model for combining climate, losses & damages, procurem
 
 
 ## Directory Tree:
-1. [Sources](https://github.com/CivicDataLab/IDS-DRR-Assam/tree/main/Sources): Contains all data sources along with the scripts used to obtain data from these sources. 
+1. [Sources](https://github.com/CivicDataLab/flood-data-ecosystem-Odisha/tree/main/Sources): Contains all data sources along with the scripts used to obtain data from these sources. 
 
 ## License:
 All content in this repository is licensed under
