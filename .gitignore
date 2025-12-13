@@ -6,6 +6,8 @@ MissionAntyodaya2020_Assam.xlsx
 scraped_data.csv
 bharatmaps_vil2017_odisha.geojson
 Odisha_antyodaya_village_dataset.xlsx
+river-order.geojson
+Sources/WRIS/RawData/distance-from-river/river-order.geojson
 *.zip
 *.grd
 

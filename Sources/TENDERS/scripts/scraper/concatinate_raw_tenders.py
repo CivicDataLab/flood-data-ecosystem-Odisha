@@ -2,18 +2,18 @@ import pandas as pd
 import os
 import glob
 
-for year in range(2025,2026):
+for year in range(2024,2026):
     year = str(year)
     
-    for month in range(1,4):        
+    for month in range(1,12):        
         month=str(month)
         if int(month)<10:
             month = '0'+str(month)
         folder = year+'_'+str(month)
 
         print(year+'_'+month)
-        path = os.getcwd() + '/IDS-DRR-Assam/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/{}'.format(folder)
-        data_path = os.getcwd() + '/IDS-DRR-Assam/Sources/TENDERS/data/monthly_tenders/'
+        path = os.getcwd() + '/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/{}'.format(folder)
+        data_path = os.getcwd() + '/Sources/TENDERS/data/monthly_tenders/'
 
         csvs = glob.glob(path+'/*.csv')
         

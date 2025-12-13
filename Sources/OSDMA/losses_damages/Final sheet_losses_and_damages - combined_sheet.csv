@@ -1,9 +1,4 @@
-District,timeperiod,No. of person evacuated,No. of Persons Rescued,Population Affected,"Total 
-Livestock Lost",House Damage Total,Cultivated Area affected in Hectare,Crop Loss Total in hact.,Population Affected in Cyclone  Fani ,"No. of Person 
-evacuated in cyclone Fani",House Damage Total   in cyclone Fani,Cultivated Area affected in Hectare in cyclone Fani,"Total 
-Livestock  Affected  in cyclone Fani","Total 
-Livestock Lost  in cyclone Fani",Population Affected in Cyclone  Bulbul,No. of Persons evacuated in cyclone Bulbul,House Damage Total   in cyclone Bulbul,Cultivated Area affected in Hectare in cyclone Bulbul,"Total 
-Livestock Lost  in cyclone Bulbul",Total No. Of Death of Humans In Flood & Cyclone
+District,timeperiod,No. of person evacuated,No. of Persons Rescued,Population Affected,"Total Livestock Lost",House Damage Total,Cultivated Area affected in Hectare,Crop Loss Total in hact.,Population Affected in Cyclone Fani ,"No. of Person evacuated in cyclone Fani",House Damage Total in cyclone Fani,Cultivated Area affected in Hectare in cyclone Fani,"Total Livestock Affected in cyclone Fani","Total Livestock Lost in cyclone Fani",Population Affected in Cyclone Bulbul,No. of Persons evacuated in cyclone Bulbul,House Damage Total in cyclone Bulbul,Cultivated Area affected in Hectare in cyclone Bulbul,"Total Livestock Lost in cyclone Bulbul",Total No. Of Death of Humans In Flood & Cyclone
 Anugul,2019-20,300,0,5019,0,167,0,0,5709,5587,519,0,0,0,0,0,0,0,0,45
 Balangir,2019-20,23388,23388,215050,59,14151,24319.3,5635.5,0,0,0,0,0,0,0,0,0,0,0,20
 Baleshwar,2019-20,0,0,0,0,0,0,0,1133374,238520,1143,17775,62268,32,516900,1208,563,28542.2,0,85

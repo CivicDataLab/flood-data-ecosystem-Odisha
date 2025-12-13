@@ -20,8 +20,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
-year = "2024"#sys.argv[1]
-month = "4"#sys.argv[2]
+year = sys.argv[1]
+month = sys.argv[2]
 
 month_start = str(int(month)-1)
 month_end = str(int(month)-1)

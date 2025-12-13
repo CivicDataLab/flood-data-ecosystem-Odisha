@@ -5,7 +5,7 @@ import dateutil.parser
 import glob
 
 # input_df - after the scraper code is run
-data_path = os.getcwd() + r'/flood-data-ecosystem-Odisha/Sources/TENDERS/data/monthly_tenders/'
+data_path = os.getcwd() + r'/Sources/TENDERS/data/monthly_tenders/'
 
 # Identify flood related tenders using keywords
 def populate_keyword_dict(keyword_list): 
@@ -197,13 +197,13 @@ for csv in csvs:
             sub_head_dict = {k: v for k, v in preparedness_measures_dict.items() if v is not False}
             tenders_df.loc[index, "Flood Response - Subhead"] = str(sub_head_dict)  
 
-    tenders_df.to_csv(os.getcwd()+r'/flood-data-ecosystem-Odisha/Sources/TENDERS/data/flood_tenders/'+filename,
+    tenders_df.to_csv(os.getcwd()+r'/Sources/TENDERS/data/flood_tenders/'+filename,
                             encoding='utf-8',
                             index=False)
                             
     
 # Add explanation for this piece of code
-data_path = os.getcwd() + r'/flood-data-ecosystem-Odisha/Sources/TENDERS/data/'
+data_path = os.getcwd() + r'/Sources/TENDERS/data/'
 csvs = glob.glob(data_path+r'/flood_tenders/*.csv')
 dfs=[]
 for csv in csvs:
