@@ -10,16 +10,16 @@ from selenium.webdriver.common.by import By
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import glob
 import pandas as pd
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
-warnings.filterwarnings("ignore", category=DeprecationWarning) 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 import pytesseract
-
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+pytesseract.pytesseract.tesseract_cmd = r"/opt/anaconda3/bin/tesseract"
 year = sys.argv[1]
 month = sys.argv[2]
 
@@ -49,12 +49,12 @@ except:
 
 url = r'https://tendersodisha.gov.in/nicgep/app?page=WebTenderStatusLists&service=page'
 print(url)
-firefox_options = Options()
-firefox_options.headless = True
-#service=Service(r"D:\CivicDataLab_IDS-DRR\IDS-DRR_Github\IDS-DRR-Assam\Sources\TENDERS\scripts\scraper\chromedriver")
-service = Service(r"C:\Users\saura\anaconda3\Scripts\geckodriver.exe")
-#browser = WebDriver()
-print(firefox_options)
+chrome_options = Options()
+chrome_options.add_argument('--headless=new')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-dev-shm-usage')
+chrome_options.add_argument('--window-size=1920,1080')
+service = Service(ChromeDriverManager().install())
 os.chdir(os.getcwd()+r"/Sources/TENDERS/scripts/scraper/scraped_recent_tenders")
 dict_tables_type = {"Bids List": "Vertical","Technical Bid Opening Summary":"Horizontal",
                    "Technical Evaluation Summary Details":"Horizontal",
@@ -120,10 +120,12 @@ def captcha_input(xpath_image, xpath_input_text):
         EC.presence_of_element_located((By.XPATH, xpath_image))
     )
 
-    # 2) give yourself time to read it and type it back
-    user_sol = input("🔒  Captcha is now visible in the browser.  Please type it here: ")
+    # 2) save captcha screenshot so user can view it (headless mode)
+    captcha_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "captcha.png")
+    img.screenshot(captcha_path)
+    user_sol = input(f"Captcha saved to {captcha_path} — please open it and type the text here: ")
 
-    # 3) find the text‐box, clear & send your answer
+    # 3) find the text-box, clear & send your answer
     captcha_box = SeleniumScrappingUtils.get_page_element(browser, xpath_input_text)
     captcha_box.clear()
     captcha_box.send_keys(user_sol)
@@ -134,7 +136,9 @@ def captcha_input(xpath_image, xpath_input_text):
     # 5) if it complains, let you retry
     errs = browser.find_elements(By.CLASS_NAME, "error")
     while errs and "Invalid Captcha!" in errs[0].text:
-        user_sol = input("⚠️  That didn’t work—please re-type the captcha: ")
+        img = browser.find_element(By.XPATH, xpath_image)
+        img.screenshot(captcha_path)
+        user_sol = input(f"Invalid — new captcha saved to {captcha_path}, please re-type: ")
         captcha_box.clear()
         captcha_box.send_keys(user_sol)
         browser.find_element(By.ID, "Search").click()
@@ -142,7 +146,7 @@ def captcha_input(xpath_image, xpath_input_text):
 
 #Select tender status
 for tender_status_id in range(6,7): #AOC
-    browser = webdriver.Firefox(service=service, options=firefox_options)
+    browser = webdriver.Chrome(service=service, options=chrome_options)
     browser.get(url)
     wait = WebDriverWait(browser, 10)  # Wait up to 3 seconds
     tender_status_id = str(tender_status_id)
@@ -301,6 +305,9 @@ for tender_status_id in range(6,7): #AOC
             links = links[:len(tender_ids)]
         #pdb.set_trace()
         for index,link in enumerate(links):
+            if glob.glob("{}/final_{}*".format(folder, tender_ids[index])):
+                print(f"Skipping {tender_ids[index]} — already scraped")
+                continue
             browser.get(link)
             scrape_view_more_details(browser,tender_ids[index])
             scrape_view_stage_summary(browser,tender_ids[index],dict_tables_type)

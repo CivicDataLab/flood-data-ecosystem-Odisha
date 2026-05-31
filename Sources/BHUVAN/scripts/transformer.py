@@ -20,7 +20,7 @@ else:
 tic = time.perf_counter()
 path = os.getcwd() + "/Sources/BHUVAN/"
 assam_rc_gdf = gpd.read_file(
-    os.getcwd() + "/Maps/br-ids-drr_shapefile/Bihar_subdistrict_final_4326.geojson"
+    os.getcwd() + "/Maps/od_ids-drr_shapefiles/odisha_block_final.geojson"
 )
 
 files1 = glob.glob(

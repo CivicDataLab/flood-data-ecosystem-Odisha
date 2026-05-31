@@ -8,7 +8,7 @@ cwd = os.getcwd()
 path = os.getcwd() + "/Sources/BHUVAN/"
 script_path = cwd + "/Sources/BHUVAN/scripts/transformer.py"
 print(path)
-for year in [2021,2022,2023,2024]:
+for year in [2021,2022,2023,2024,2025,2026]:
     print(year)
     year = str(year)
     for month in [
