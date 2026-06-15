@@ -7,6 +7,7 @@ from captcha import captcha
 import re
 import pdb
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -286,7 +287,14 @@ for tender_status_id in range(6,7): #AOC
     def get_table_links(browser,table_xpath):
         #pdb.set_trace()
 
-        table = SeleniumScrappingUtils.get_page_element(browser,table_xpath)
+        try:
+            table = SeleniumScrappingUtils.get_page_element(browser,table_xpath)
+        except TimeoutException:
+            debug_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_no_table.png")
+            browser.save_screenshot(debug_path)
+            print(f"Could not find table at {table_xpath}. Page screenshot saved to {debug_path}")
+            print("Page text snippet:", browser.find_element(By.TAG_NAME, "body").text[:500])
+            raise
         elements_list = table.find_elements(By.CSS_SELECTOR,"a")
         links = [element.get_attribute("href") for element in elements_list]
         rows = table.find_elements(By.CSS_SELECTOR,"tr")

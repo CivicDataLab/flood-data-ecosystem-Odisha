@@ -24,7 +24,7 @@ def sanitize_filename(filename):
     return sanitized
 
 MAX_RELOADS = 3
-SLEEP_TIME = 5
+SLEEP_TIME = 20
 class SeleniumScrappingUtils(object):
     def __init__(self):
         pass
@@ -95,7 +95,13 @@ class SeleniumScrappingUtils(object):
         '''
         extension = 'csv'
         all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
-        combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames ], axis = 1)
+        dfs = []
+        for f in all_filenames:
+            try:
+                dfs.append(pd.read_csv(f))
+            except pd.errors.EmptyDataError:
+                print(f"Skipping empty file: {f}")
+        combined_csv = pd.concat(dfs, axis = 1) if dfs else pd.DataFrame()
         combined_csv['Tender Stage'] = tender_status
         combined_csv.to_csv(path_to_save + name_of_file+".csv", index=False, encoding='utf-8-sig')
    

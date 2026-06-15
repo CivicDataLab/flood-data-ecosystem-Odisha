@@ -5,7 +5,7 @@ from datetime import date, timedelta
 cwd = os.getcwd()
 script_path = cwd+r'/Sources/TENDERS/scripts/scraper/scraper_odisha_recent_tenders_tender_status.py'
 
-for year in range(2025,2026):
+for year in range(2023,2024):
     year = str(year)
     for month in range(10,13):        
         month=str(month)

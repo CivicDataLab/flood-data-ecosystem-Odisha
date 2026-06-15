@@ -44,7 +44,7 @@ csvs = glob.glob(data_path+'*.csv')
 
 for csv in csvs:
     filename  = re.split(r'/',csv)[-1]
-    filename  = re.split(r'\\',csv)[-1]
+    #filename  = re.split(r'\\',csv)[-1]
     print ("FILENAME"+ filename)
     input_df = pd.read_csv(csv)
     
@@ -208,7 +208,7 @@ csvs = glob.glob(data_path+r'/flood_tenders/*.csv')
 dfs=[]
 for csv in csvs:
     csv = csv.replace("//", "/")
-    csv = csv.replace("\\", "/")
+    #csv = csv.replace("\\", "/")
     month = csv.split(r'/')[-1][:7]
     df = pd.read_csv(csv)
     df['month'] = month
