@@ -1,6 +1,11 @@
 #Large files
 *.nc
 *.tif
+
+# Selenium driver binaries (downloaded at runtime)
+Sources/TENDERS/scripts/scraper/geckodriver
+Sources/TENDERS/scripts/scraper/chromedriver
+Sources/TENDERS/scripts/scraper/LICENSE.chromedriver
 Waterlevel_assam_stations.csv
 MissionAntyodaya2020_Assam.xlsx
 scraped_data.csv
