@@ -6,10 +6,10 @@ import geopandas as gpd
 import warnings
 warnings.filterwarnings("ignore")
 
-variables_data_path = os.getcwd() + r'/flood-data-ecosystem-Odisha/Sources/master/'
-od_sd = gpd.read_file(r'D:\CivicDataLab_IDS-DRR\IDS-DRR_Github\flood-data-ecosystem-Odisha\Maps\od_ids-drr_shapefiles\odisha_block_final.geojson')
+variables_data_path = os.getcwd() + '/Sources/master/'
+od_sd = gpd.read_file('/Users/stephensmathew/cdl_rep/flood-data-ecosystem-Odisha/Maps/od_ids-drr_shapefiles/odisha_block_final.geojson')
 
-date_range = pd.date_range(start="2021-04-01", end="2024-11-01", freq='MS')
+date_range = pd.date_range(start="2021-04-01", end="2026-05-30", freq='MS')
 
 # Format the date values as "YYYY_MM" strings
 formatted_dates = [date.strftime('%Y_%m') for date in date_range]
@@ -27,12 +27,13 @@ print(master_df)
 
 # Variables for model input
 monthly_variables = ['total_tender_awarded_value',
+                     'SDMF_tenders_awarded_value',
                      #'SOPD_tenders_awarded_value', 
-                     #'SDRF_tenders_awarded_value', 
-                     'RIDF_tenders_awarded_value', #'LTIF_tenders_awarded_value', 'CIDF_tenders_awarded_value',
-                      'Preparedness Measures_tenders_awarded_value', 
-                      'Immediate Measures_tenders_awarded_value', 
-                      'Others_tenders_awarded_value',
+                    'SDRF_tenders_awarded_value', 
+                    'RIDF_tenders_awarded_value', #'LTIF_tenders_awarded_value', 'CIDF_tenders_awarded_value',
+                    'Preparedness Measures_tenders_awarded_value', 
+                    'Immediate Measures_tenders_awarded_value', 
+                    'Others_tenders_awarded_value',
                       #'Total_Animal_Washed_Away', 'Total_Animal_Affected',
                       #'Population_affected_Total', 'Crop_Area',
                       #'Male_Camp', 'Female_Camp', 'Children_Camp',
@@ -143,7 +144,7 @@ master_df = master_df.fillna(0)
 # Drop columns with suffixes "_x" and "_y"
 master_df = master_df.loc[:, ~master_df.columns.str.endswith('_x') & ~master_df.columns.str.endswith('_y')]
 
-master_df.to_csv(os.getcwd() + '/flood-data-ecosystem-Odisha/RiskScoreModel/data/MASTER_VARIABLES.csv', index=False)
+master_df.to_csv(os.getcwd() + '/MASTER_VARIABLES.csv', index=False)
 #master_df[master_df.duplicated(subset= ['object_id', 'timeperiod'])].to_csv('MASTER_VARIABLES.csv', index=False)
 
 print(master_df.shape)

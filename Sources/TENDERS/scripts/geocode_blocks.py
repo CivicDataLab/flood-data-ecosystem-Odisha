@@ -2,149 +2,156 @@ import pandas as pd
 import os
 import re
 import geopandas as gpd
-from tqdm import tqdm 
+from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
 
-OD_VILLAGES = pd.read_csv(os.getcwd()+'/Maps/od_ids-drr_shapefiles/ODISHA_VILLAGES_MASTER.csv', encoding='utf-8').dropna()
-OD_BLOCKS = gpd.read_file(os.getcwd()+'/Maps/od_ids-drr_shapefiles/odisha_block_final.geojson', driver='GeoJSON')
+# ── Paths ──────────────────────────────────────────────────────────────────────
+BASE       = os.getcwd()
+VILLAGES_PATH = os.path.join(BASE, 'Maps', 'od_ids-drr_shapefiles', 'ODISHA_VILLAGES_MASTER.csv')
+BLOCKS_PATH   = os.path.join(BASE, 'Maps', 'od_ids-drr_shapefiles', 'odisha_block_final.geojson')
+INPUT_PATH    = os.path.join(BASE, 'Sources', 'TENDERS', 'data', 'floodtenders_districtgeotagged.csv')
+OUTPUT_PATH   = os.path.join(BASE, 'Sources', 'TENDERS', 'data', 'floodtenders_blockgeotagged.csv')
 
+# ── Load data ──────────────────────────────────────────────────────────────────
+OD_VILLAGES = pd.read_csv(VILLAGES_PATH, encoding='utf-8').dropna()
+OD_BLOCKS   = gpd.read_file(BLOCKS_PATH, driver='GeoJSON')
+tenders_df  = pd.read_csv(INPUT_PATH, keep_default_na=False)
 
-tenders_df  = pd.read_csv(os.getcwd()+ '/Sources/TENDERS/data/floodtenders_districtgeotagged.csv', keep_default_na=False)
+# Substrings to strip from location names before regex matching
+REMOVE_SUBSTRINGS = ["(pt)", "\n"]
+REMOVE_PATTERN    = "|".join(map(re.escape, REMOVE_SUBSTRINGS))
 
+# Noise village names to always exclude
+VILLAGE_NOISE = {'RIVER', 'NO', 'TOWN'}
+
+# ── Main loop ──────────────────────────────────────────────────────────────────
 MASTER_DFs = []
+
 for FOCUS_DISTRICT in tqdm(OD_VILLAGES.dtname.unique()):
-    # Create dictionary for FOCUS DISTRICTS
+
+    # -- Build lookup dicts for this district ----------------------------------
     FOCUSDIST_village_dict = {}
+    FOCUSDIST_block_dict   = {}
+    FOCUSDIST_gp_dict      = {}
     FOCUSDIST_subdistrict_dict = {}
-    FOCUSDIST_block_dict = {}
-    FOCUSDIST_gp_dict = {}
-    FOCUSDIST_district_dict = {}
-    
-    for index,row in OD_VILLAGES[OD_VILLAGES.dtname==FOCUS_DISTRICT].iterrows():
-        if row["vilnam_soi"]:
-            row["vilnam_soi"] = re.sub(r'[^a-zA-Z]', "", row["vilnam_soi"])
-            #if row["vilnam_soi"] in VILLAGE_CORRECTION_DICT:
-            #    row["vilnam_soi"] = VILLAGE_CORRECTION_DICT[row["vilnam_soi"]]
 
-            FOCUSDIST_village_dict[row["vilnam_soi"]] = {"village_id" : row["objectid"],
-                                                     "block_name" : row["block_name"],
-                                                     "block" : row["block_name"],
-                                                     "gp_name": row["gp_name"],
-                                                     "dtname" : row["dtname"]}
+    for _, row in OD_VILLAGES[OD_VILLAGES.dtname == FOCUS_DISTRICT].iterrows():
 
-        FOCUSDIST_block_dict[row["block_name"]] = {"block" : row["block_name"],
-                                               "subdistrict": row["sdtname"],
-                                               #"gp_name" : row["gp_name"],
-                                              "dtname" : row["dtname"]}
+        # Village dict
+        vil = row["vilnam_soi"]
+        if vil and vil not in VILLAGE_NOISE:
+            vil_clean = re.sub(r'[^a-zA-Z]', "", str(vil))
+            if vil_clean and vil_clean not in VILLAGE_NOISE:
+                FOCUSDIST_village_dict[vil_clean] = {
+                    "village_id": row["objectid"],
+                    "block_name": row["block_name"],
+                    "gp_name":    row["gp_name"],
+                    "dtname":     row["dtname"],
+                }
 
-        FOCUSDIST_block_dict[row["block_name"]] = {"dtname" : row["dtname"]} 
-        FOCUSDIST_gp_dict[row["gp_name"]] = {"dtname" : row["dtname"]} 
-        FOCUSDIST_district_dict[row["dtname"]] = True
-    
-    try:
-        del FOCUSDIST_village_dict['RIVER']
-        del FOCUSDIST_village_dict['NO']
-        del FOCUSDIST_village_dict['TOWN']
-    except:
-        pass
-    
-    FOCUSDIST_villages = list(FOCUSDIST_village_dict.keys())
-    FOCUSDIST_blocks = list(FOCUSDIST_block_dict.keys())
+        # Block dict  — FIX: only written once, retains subdistrict
+        FOCUSDIST_block_dict[row["block_name"]] = {
+            "block":       row["block_name"],
+            "subdistrict": row["sdtname"],
+            "dtname":      row["dtname"],
+        }
+
+        # GP dict
+        FOCUSDIST_gp_dict[row["gp_name"]] = {"dtname": row["dtname"]}
+
+        # Subdistrict dict
+        FOCUSDIST_subdistrict_dict[row["sdtname"]] = {"dtname": row["dtname"]}
+
+    FOCUSDIST_villages    = list(FOCUSDIST_village_dict.keys())
+    FOCUSDIST_blocks      = list(FOCUSDIST_block_dict.keys())
+    FOCUSDIST_gp          = list(FOCUSDIST_gp_dict.keys())
     FOCUSDIST_subdistricts = list(FOCUSDIST_subdistrict_dict.keys())
-    FOCUSDIST_gp = list(FOCUSDIST_gp_dict.keys())
-    
-    ## GEO-CODE VILLAGES, BLOCKS, REVENUE-CIRCLES
-    tenders_df_FOCUSDISTRICT = tenders_df[tenders_df["DISTRICT_FINALISED"] == FOCUS_DISTRICT]
-    for idx, row in tenders_df_FOCUSDISTRICT.iterrows():
-        tender_villages = []
-        tender_village_id = ""
-        tender_block = ""
-        tender_gp = ""
-        tender_subdistrict = ""
-        #tender_revenueci_location = ""
 
-        tender_slug = str(row['tender_externalreference']) + ' ' + str(row['tender_title']) + ' ' + str(row['Work Description'])
+    # -- Tag tenders for this district -----------------------------------------
+    tenders_df_FOCUSDISTRICT = tenders_df[
+        tenders_df["DISTRICT_FINALISED"] == FOCUS_DISTRICT
+    ].copy()
+
+    for idx, row in tenders_df_FOCUSDISTRICT.iterrows():
+
+        # FIX: initialise ALL variables — including tender_block_location
+        tender_villages        = []
+        tender_village_id      = ""
+        tender_block           = ""
+        tender_gp              = ""
+        tender_subdistrict     = ""
+        tender_block_location  = ""   
+
+        # Build the searchable slug
+        tender_slug = (
+            str(row['tender_externalreference']) + ' ' +
+            str(row['tender_title'])             + ' ' +
+            str(row['Work Description'])
+        )
         tender_slug = re.sub(r'[^a-zA-Z0-9 \n\.]', ' ', tender_slug)
 
-        # List of substrings to remove from GPE names
-        substrings_to_remove = ["(pt)", "\n"]
-        # Construct the regex pattern by joining the substrings with "|"
-        pattern = "|".join(map(re.escape, substrings_to_remove))
-
+        # -- Village matching --
         for village in FOCUSDIST_villages:
             if not re.search(r'[a-zA-Z]', village):
-                continue 
+                continue
             village = re.sub(r"[\[\]]?", "", village)
-            
-            #if village in VILLAGE_CORRECTION_DICT:
-            #    village = VILLAGE_CORRECTION_DICT[village]
-
-            village_search = village.lower()
-            village_search = re.sub(pattern, " ", village_search)
-
-            if re.findall(r'\b%s\b'%village_search.strip(), tender_slug.lower()):
+            village_search = re.sub(REMOVE_PATTERN, " ", village.lower())
+            if re.findall(r'\b%s\b' % village_search.strip(), tender_slug.lower()):
                 tender_villages.append(village)
                 tender_village_id = FOCUSDIST_village_dict[village]['village_id']
-                tender_block = FOCUSDIST_village_dict[village]['block_name']
-                #tender_revenueci = FOCUSDIST_village_dict[village]['revenuecircle']
-                #tender_block = FOCUSDIST_village_dict[village]['block']
-            
-        
+                tender_block      = FOCUSDIST_village_dict[village]['block_name']
+
+        # -- Block matching --
         for block in FOCUSDIST_blocks:
-            block_search = block.lower()
-            block_search = re.sub(pattern, " ", block_search)
-            if re.findall(r'\b%s\b'%block_search.strip(), tender_slug.lower()):
-                tender_block = block
-                #tender_gp = FOCUSDIST_block_dict[block]['gp_name']
-                #tender_subdistrict = FOCUSDIST_block_dict[block]['subdistrict']
+            block_search = re.sub(REMOVE_PATTERN, " ", block.lower())
+            if re.findall(r'\b%s\b' % block_search.strip(), tender_slug.lower()):
                 tender_block_location = block
                 break
 
+        # -- GP matching --
         for gp in FOCUSDIST_gp:
-            gp_search = gp.lower()
-            gp_search = re.sub(pattern, " ", gp_search)
-            if re.findall(r'\b%s\b'%gp_search.strip(), tender_slug.lower()):
+            gp_search = re.sub(REMOVE_PATTERN, " ", gp.lower())
+            if re.findall(r'\b%s\b' % gp_search.strip(), tender_slug.lower()):
                 tender_gp = gp
                 break
-        
+
+        # -- Subdistrict matching --
         for subdistrict in FOCUSDIST_subdistricts:
-            subdistrict_search = subdistrict.lower()
-            subdistrict_search = re.sub(pattern, " ", subdistrict_search)
-            if re.findall(r'\b%s\b'%subdistrict_search.strip(), tender_slug.lower()):
+            subdistrict_search = re.sub(REMOVE_PATTERN, " ", subdistrict.lower())
+            if re.findall(r'\b%s\b' % subdistrict_search.strip(), tender_slug.lower()):
                 tender_subdistrict = subdistrict
                 break
 
+        tenders_df_FOCUSDISTRICT.loc[idx, 'tender_villages']       = str(tender_villages)[1:-1]
+        tenders_df_FOCUSDISTRICT.loc[idx, 'tender_block']          = tender_block
+        tenders_df_FOCUSDISTRICT.loc[idx, 'tender_subdistrict']    = tender_subdistrict
+        tenders_df_FOCUSDISTRICT.loc[idx, 'gp']                    = tender_gp
+        tenders_df_FOCUSDISTRICT.loc[idx, 'tender_block_location'] = tender_block_location
 
-        tenders_df_FOCUSDISTRICT.loc[idx,'tender_villages'] = str(tender_villages)[1:-1]
-        tenders_df_FOCUSDISTRICT.loc[idx,'tender_block'] = tender_block
-        tenders_df_FOCUSDISTRICT.loc[idx,'tender_subdistrict'] = tender_subdistrict
-        tenders_df_FOCUSDISTRICT.loc[idx,'gp'] = tender_gp
-        tenders_df_FOCUSDISTRICT.loc[idx,'tender_block_location'] = tender_block_location
-        
-    MASTER_DFs.append(tenders_df_FOCUSDISTRICT)  
+    MASTER_DFs.append(tenders_df_FOCUSDISTRICT)
 
-
+# Append unresolved rows
 MASTER_DFs.append(tenders_df[tenders_df["DISTRICT_FINALISED"] == 'NA'])
 MASTER_DFs.append(tenders_df[tenders_df["DISTRICT_FINALISED"] == 'CONFLICT'])
 
 MASTER_DF = pd.concat(MASTER_DFs)
 
-#HQ Flag and RC Finalisation
-#MASTER_DF['HQ_flag'] = False
+# ── BLOCK_FINALISED resolution ─────────────────────────────────────────────────
+# FIX: clear priority logic instead of the original overwrite-then-check pattern
+#   1. Direct block-name hit in slug  → tender_block_location
+#   2. Village-derived block          → tender_block
+#   3. Neither                        → ''
 MASTER_DF['BLOCK_FINALISED'] = ''
+
 for idx, row in MASTER_DF.iterrows():
-    #if row['tender_revenueci_location'] in RC_HQs:
-    #    MASTER_DF.loc[idx, 'HQ_flag'] = True
-    
-    #if row['HQ_flag'] == False:
-    MASTER_DF.loc[idx, 'BLOCK_FINALISED'] = row['tender_block_location']
-
-    if row['tender_block_location'] == '':
+    if row['tender_block_location']:
+        MASTER_DF.loc[idx, 'BLOCK_FINALISED'] = row['tender_block_location']
+    elif row['tender_block']:
         MASTER_DF.loc[idx, 'BLOCK_FINALISED'] = row['tender_block']
-    
-    if row['tender_block_location'] == row['tender_block']:
-        MASTER_DF.loc[idx, 'BLOCK_FINALISED'] = row['tender_block']
+    # else stays ''
 
-    # If HQ True AND row['tender_revenueci_location'] != row['tender_revenueci']?
-MASTER_DF.to_csv(os.getcwd()+ '/Sources/TENDERS/data/floodtenders_blockgeotagged.csv')
+# ── Save ───────────────────────────────────────────────────────────────────────
+MASTER_DF.to_csv(OUTPUT_PATH, index=False)
+print(f"Done. {len(MASTER_DF)} rows saved to {OUTPUT_PATH}")
+print(f"BLOCK_FINALISED fill rate: {(MASTER_DF['BLOCK_FINALISED'] != '').sum()} / {len(MASTER_DF)}")
