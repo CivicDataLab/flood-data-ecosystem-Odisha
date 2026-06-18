@@ -6,12 +6,11 @@ from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
 
-OD_VILLAGES = pd.read_csv(os.getcwd()+r'/flood-data-ecosystem-Odisha\Maps\Geojson\ODISHA_VILLAGES_MASTER.csv', encoding='utf-8').dropna()
-OD_BLOCKS = gpd.read_file(os.getcwd()+r'\flood-data-ecosystem-Odisha\Maps\od_ids-drr_shapefiles\odisha_block_final.geojson', driver='GeoJSON')
+OD_VILLAGES = pd.read_csv(os.getcwd()+'/Maps/od_ids-drr_shapefiles/ODISHA_VILLAGES_MASTER.csv', encoding='utf-8').dropna()
+OD_BLOCKS = gpd.read_file(os.getcwd()+'/Maps/od_ids-drr_shapefiles/odisha_block_final.geojson', driver='GeoJSON')
 
-#BLOCK_HQs = list(OD_BLOCKS[OD_BLOCKS.HQ=='y']['revenue_ci'])
 
-tenders_df  = pd.read_csv(os.getcwd()+r'\flood-data-ecosystem-Odisha\Sources\TENDERS\data\floodtenders_districtgeotagged.csv', keep_default_na=False)
+tenders_df  = pd.read_csv(os.getcwd()+ '/Sources/TENDERS/data/floodtenders_districtgeotagged.csv', keep_default_na=False)
 
 MASTER_DFs = []
 for FOCUS_DISTRICT in tqdm(OD_VILLAGES.dtname.unique()):
@@ -148,4 +147,4 @@ for idx, row in MASTER_DF.iterrows():
         MASTER_DF.loc[idx, 'BLOCK_FINALISED'] = row['tender_block']
 
     # If HQ True AND row['tender_revenueci_location'] != row['tender_revenueci']?
-MASTER_DF.to_csv(os.getcwd()+r'/flood-data-ecosystem-Odisha\/Sources/TENDERS/data/floodtenders_blockgeotagged.csv')
+MASTER_DF.to_csv(os.getcwd()+ '/Sources/TENDERS/data/floodtenders_blockgeotagged.csv')
