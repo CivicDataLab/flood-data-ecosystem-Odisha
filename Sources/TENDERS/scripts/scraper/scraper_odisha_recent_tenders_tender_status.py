@@ -7,20 +7,19 @@ from captcha import captcha
 import re
 import pdb
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 import glob
 import pandas as pd
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import sys
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings("ignore", category=DeprecationWarning) 
 import pytesseract
-pytesseract.pytesseract.tesseract_cmd = r"/opt/anaconda3/bin/tesseract"
+
+pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
 year = sys.argv[1]
 month = sys.argv[2]
 
@@ -33,30 +32,30 @@ elif month_end=='1':
 else:
     date_end = '30'
 
-
 if int(month)<10:
     month = '0'+str(month)
 folder = year+'_'+str(month)
+
 try:
     print(os.getcwd())
-    os.mkdir(os.getcwd()+r'/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/'+folder)
+    os.mkdir(os.getcwd() + "/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/" + folder)
 except FileExistsError:
     pass
 
 try:
-    os.mkdir(os.getcwd()+r'/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/concatinated_csvs')
+    os.mkdir(os.getcwd() + "/Sources/TENDERS/scripts/scraper/scraped_recent_tenders/concatinated_csvs")
 except:
     pass
 
-url = r'https://tendersodisha.gov.in/nicgep/app?page=WebTenderStatusLists&service=page'
+url = 'https://tendersodisha.gov.in/nicgep/app?page=WebTenderStatusLists&service=page'
 print(url)
-chrome_options = Options()
-chrome_options.add_argument('--headless=new')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
-chrome_options.add_argument('--window-size=1920,1080')
-service = Service(ChromeDriverManager().install())
-os.chdir(os.getcwd()+r"/Sources/TENDERS/scripts/scraper/scraped_recent_tenders")
+firefox_options = Options()
+firefox_options.binary_location = "/Applications/Firefox.app/Contents/MacOS/firefox"
+service = Service("/Users/stephensmathew/anaconda3/bin/geckodriver", 
+                  service_args=["--allow-system-access"])
+print(firefox_options)
+os.chdir(os.getcwd() + "/Sources/TENDERS/scripts/scraper/scraped_recent_tenders")
+
 dict_tables_type = {"Bids List": "Vertical","Technical Bid Opening Summary":"Horizontal",
                    "Technical Evaluation Summary Details":"Horizontal",
                    "Bid Opening Summary":"Horizontal",
@@ -78,53 +77,17 @@ dict_tender_status = {'1': "To be Opened Tenders",
                       '8': "Cancelled"}
 
 def sanitize_filename(filename):
-    # Remove invalid characters: \ / : * ? " < > | (on Windows)
     sanitized = re.sub(r'[<>:"/\\|?*₹,]', '', filename)
-    # Optionally replace spaces with underscores
     sanitized = sanitized.replace(' ', '_')
     return sanitized
 
-'''
-def captcha_input(xpath_image,xpath_input_text):
-    captcha_text = captcha(browser,xpath_image)
-    pdb.set_trace()
-    captcha_input_element = SeleniumScrappingUtils.get_page_element(browser,xpath_input_text)
-    SeleniumScrappingUtils.input_text_box(browser, captcha_input_element,captcha_text)
-    #wait = WebDriverWait(browser, 10)
-    button = browser.find_element(By.XPATH, "//*[@id='Search']") 
-    button.click()
-    invalid_string = browser.find_elements(By.CLASS_NAME,"error")
-    print(invalid_string)
-    if len(invalid_string)==0:
-        pass
-    else:
-        while 'Invalid Captcha!' in invalid_string[0].text:
-            captcha_text = captcha(browser,xpath_image)
-            captcha_input_element = SeleniumScrappingUtils.get_page_element(browser,xpath_input_text)
-            SeleniumScrappingUtils.input_text_box(browser, captcha_input_element,captcha_text)
-            time.sleep(3)
-            
-            button = browser.find_element(By.XPATH, "//*[@id='Search']")
-            button.click()
-
-            invalid_string = browser.find_elements(By.CLASS_NAME,"error")
-            if len(invalid_string)==0:
-                break
-            elif 'Invalid Captcha!' not in invalid_string[0].text:
-                break
-            else:
-                pass
-'''
 def captcha_input(xpath_image, xpath_input_text):
     # 1) wait for the captcha <img> to load
     img = WebDriverWait(browser, 10).until(
         EC.presence_of_element_located((By.XPATH, xpath_image))
     )
-
-    # 2) save captcha screenshot so user can view it (headless mode)
-    captcha_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "captcha.png")
-    img.screenshot(captcha_path)
-    user_sol = input(f"Captcha saved to {captcha_path} — please open it and type the text here: ")
+    # 2) give yourself time to read it and type it back
+    user_sol = input("🔒  Captcha is now visible in the browser.  Please type it here: ")
 
     # 3) find the text-box, clear & send your answer
     captcha_box = SeleniumScrappingUtils.get_page_element(browser, xpath_input_text)
@@ -137,58 +100,50 @@ def captcha_input(xpath_image, xpath_input_text):
     # 5) if it complains, let you retry
     errs = browser.find_elements(By.CLASS_NAME, "error")
     while errs and "Invalid Captcha!" in errs[0].text:
-        img = browser.find_element(By.XPATH, xpath_image)
-        img.screenshot(captcha_path)
-        user_sol = input(f"Invalid — new captcha saved to {captcha_path}, please re-type: ")
+        user_sol = input("⚠️  That didn't work—please re-type the captcha: ")
         captcha_box.clear()
         captcha_box.send_keys(user_sol)
         browser.find_element(By.ID, "Search").click()
         errs = browser.find_elements(By.CLASS_NAME, "error")
 
-#Select tender status
-for tender_status_id in range(6,7): #AOC
-    browser = webdriver.Chrome(service=service, options=chrome_options)
+# Select tender status
+for tender_status_id in range(6, 7):  # AOC
+    browser = webdriver.Firefox(service=service, options=firefox_options)
     browser.get(url)
-    wait = WebDriverWait(browser, 10)  # Wait up to 3 seconds
+    wait = WebDriverWait(browser, 10)
     tender_status_id = str(tender_status_id)
     print('tenderStatusid: ', dict_tender_status[tender_status_id])
-    SeleniumScrappingUtils.select_drop_down(browser,'//*[@id="tenderStatus"]',tender_status_id) #3
+    SeleniumScrappingUtils.select_drop_down(browser, '//*[@id="tenderStatus"]', tender_status_id)
 
-
-    #Select date for tender scraping 
-    #from date
+    # Select date for tender scraping
+    # from date
     from_date_element = SeleniumScrappingUtils.get_page_element(browser, '//*[@id="frmSearchFilter"]/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[4]/td/table/tbody/tr/td/table/tbody/tr[3]/td[2]/a')
     from_date_element.click()
-    #Select month - 0 means January
-    SeleniumScrappingUtils.select_drop_down(browser,'//*[@id="Body"]/div[2]/div[1]/table/tbody/tr/td[2]/select',value=month_start)
-    #Select year
-    SeleniumScrappingUtils.select_drop_down(browser,'//*[@id="Body"]/div[2]/div[1]/table/tbody/tr/td[3]/select',value = year)
-    #Select Date
-    #SeleniumScrappingUtils.get_page_element(browser,'//*[@id="Body"]/div[2]/div[2]/table/tbody/tr[1]/td[7]').click()
+    # Select month - 0 means January
+    SeleniumScrappingUtils.select_drop_down(browser, '//*[@id="Body"]/div[2]/div[1]/table/tbody/tr/td[2]/select', value=month_start)
+    # Select year
+    SeleniumScrappingUtils.select_drop_down(browser, '//*[@id="Body"]/div[2]/div[1]/table/tbody/tr/td[3]/select', value=year)
+    # Select Date
     browser.find_element(By.XPATH, "//td[text()='1']").click()
 
-    #to_date
+    # to_date
     to_date_element = SeleniumScrappingUtils.get_page_element(browser, '//*[@id="frmSearchFilter"]/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr[4]/td/table/tbody/tr/td/table/tbody/tr[3]/td[4]/a')
     to_date_element.click()
-    #Select month
-    SeleniumScrappingUtils.select_drop_down(browser,'//*[@id="Body"]/div[3]/div[1]/table/tbody/tr/td[2]/select',value=month_end)
-    #Select year
-    SeleniumScrappingUtils.select_drop_down(browser,'//*[@id="Body"]/div[3]/div[1]/table/tbody/tr/td[3]/select',value = year)
-    #Select Date
-    #SeleniumScrappingUtils.get_page_element(browser,'//*[@id="Body"]/div[3]/div[2]/table/tbody/tr[5]/td[3]').click()
+    # Select month
+    SeleniumScrappingUtils.select_drop_down(browser, '//*[@id="Body"]/div[3]/div[1]/table/tbody/tr/td[2]/select', value=month_end)
+    # Select year
+    SeleniumScrappingUtils.select_drop_down(browser, '//*[@id="Body"]/div[3]/div[1]/table/tbody/tr/td[3]/select', value=year)
+    # Select Date
     td_elements = browser.find_elements(By.XPATH, "//td[text()='{}']".format(date_end))
     td_elements[1].click()
 
-    #break captcha
-    captcha_input('//*[@id="captchaImage"]','//*[@id="captchaText"]')
+    # break captcha
+    captcha_input('//*[@id="captchaImage"]', '//*[@id="captchaText"]')
 
-    def scrape_view_more_details(browser,tender_id):
-        view_more_details_element = SeleniumScrappingUtils.get_page_element(browser,'//*[@id="DirectLink"]')
+    def scrape_view_more_details(browser, tender_id):
+        view_more_details_element = SeleniumScrappingUtils.get_page_element(browser, '//*[@id="DirectLink"]')
         view_more_details_element.click()
-        #time.sleep(3)
-        #since we are opening the new window selenium needs to change the focus
-    
-        #all the table elements
+
         elem_not_found = True
         while elem_not_found:
             try:
@@ -198,156 +153,108 @@ for tender_status_id in range(6,7): #AOC
                 elem_not_found = False
             except:
                 pass
-        tables = SeleniumScrappingUtils.get_multiple_page_elements(browser,'/html/body/table/tbody/tr/td/table/tbody/tr[4]/td/table/tbody/tr/td/table/tbody/tr/td/table')[0].find_elements(By.CSS_SELECTOR,"table")
+
+        tables = SeleniumScrappingUtils.get_multiple_page_elements(browser, '/html/body/table/tbody/tr/td/table/tbody/tr[4]/td/table/tbody/tr/td/table/tbody/tr/td/table')[0].find_elements(By.CSS_SELECTOR, "table")
         dict_table_section_head = {}
         for table_section_elements in tables:
             try:
-                dict_table_section_head[table_section_elements.find_element(By.CLASS_NAME,"section_head").text] = table_section_elements
+                dict_table_section_head[table_section_elements.find_element(By.CLASS_NAME, "section_head").text] = table_section_elements
             except:
                 continue
+
         for index, (keys, values) in enumerate(dict_table_section_head.items()):
-            keys = keys.replace("/","")
+            keys = keys.replace("/", "")
             if keys == "Tender Documents":
                 continue
-            # elif keys == "Work /Item(s)":
-            #     SeleniumScrappingUtils.extract_horizontal_table(values,tender_id +"_"+"Work_Item"+"_" + str(index),1)
             elif (keys.startswith("Cover Details") or keys == "Latest Corrigendum List" or keys.startswith("Other")):
-                SeleniumScrappingUtils.extract_vertical_table(values,tender_id +"_"+keys+"_" + str(index),1)
+                SeleniumScrappingUtils.extract_vertical_table(values, tender_id + "_" + keys + "_" + str(index), 1)
             elif keys == "Payment Instruments":
-                table_section = values.find_element(By.CSS_SELECTOR,"table")
-                SeleniumScrappingUtils.extract_vertical_table(table_section,tender_id +"_"+keys+"_" + str(index),1)
+                table_section = values.find_element(By.CSS_SELECTOR, "table")
+                SeleniumScrappingUtils.extract_vertical_table(table_section, tender_id + "_" + keys + "_" + str(index), 1)
             else:
-                SeleniumScrappingUtils.extract_horizontal_table(values,tender_id +"_"+keys+"_" + str(index),1)
+                SeleniumScrappingUtils.extract_horizontal_table(values, tender_id + "_" + keys + "_" + str(index), 1)
+
         path_to_save = "concatinated_csvs/"
-        SeleniumScrappingUtils.concatinate_csvs(path_to_save,tender_id,dict_tender_status[tender_status_id])
-        
+        SeleniumScrappingUtils.concatinate_csvs(path_to_save, tender_id, dict_tender_status[tender_status_id])
         directory = os.getcwd()
         SeleniumScrappingUtils.remove_csvs(directory)
         window_after = browser.window_handles[0]
         browser.switch_to.window(window_after)
 
-    def scrape_view_stage_summary(browser,tender_id,dict_tables_type):
+    def scrape_view_stage_summary(browser, tender_id, dict_tables_type):
         list_of_dict_tables_type = list(dict_tables_type.keys())
-        SeleniumScrappingUtils.get_page_element(browser,'//*[@id="DirectLink_0"]').click()
-        #time.sleep(3)
-        
-    
-        #all the table elements
+        SeleniumScrappingUtils.get_page_element(browser, '//*[@id="DirectLink_0"]').click()
+
         elem_not_found = True
         while elem_not_found:
             try:
                 window_after = browser.window_handles[1]
                 browser.switch_to.window(window_after)
                 elem = wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'table_list')))
-                sections = browser.find_elements(By.CLASS_NAME,"table_list")
+                sections = browser.find_elements(By.CLASS_NAME, "table_list")
                 elem_not_found = False
             except:
                 pass
-        
+
         try:
-            sections.append(browser.find_element_by_id("table_list"))
+            sections.append(browser.find_element(By.CLASS_NAME, "list_table"))
         except:
             pass
-        try:
-            sections.append(browser.find_element(By.CLASS_NAME,"list_table"))
-        except:
-            pass
-        # elems = sections[0].find_elements_by_xpath('//a[@href]')
-        # for index in elems:
-        #     name = index.get_attribute("text")
-        #     if ".pdf" in name or "BOQ Comparative Chart" in name:
-        #         index.click()
-        #         time.sleep(10)
-        #         name = index.get_attribute("text").replace("/t","").replace("/n","").replace(" ","").replace("\t","").replace("\n","")
-        #         if "BOQComparativeChart" in name:
-        #             os.rename(name+".xlsx","concatinated_csvs/"+tender_id+"_"+name+".xlsx")
-        #         else:
-        #             try:
-        #                 os.rename(name,"concatinated_csvs/"+tender_id+"_"+name)
-        #             except:
-        #                 time.sleep(50)
-        #                 os.rename(name,"concatinated_csvs/"+tender_id+"_"+name)
-        for index,name in enumerate(sections):
+
+        for index, name in enumerate(sections):
             if index == 0:
-                SeleniumScrappingUtils.extract_horizontal_table(name,"Org_"+tender_id,0)
-                continue 
-            header_name = name.find_element(By.CLASS_NAME,"section_head").text
+                SeleniumScrappingUtils.extract_horizontal_table(name, "Org_" + tender_id, 0)
+                continue
+            header_name = name.find_element(By.CLASS_NAME, "section_head").text
             if (header_name in list_of_dict_tables_type) & (dict_tables_type[header_name] == "Vertical"):
-                SeleniumScrappingUtils.extract_vertical_table(name,header_name+"_"+tender_id,1)
+                SeleniumScrappingUtils.extract_vertical_table(name, header_name + "_" + tender_id, 1)
             else:
-                SeleniumScrappingUtils.extract_horizontal_table(name,header_name+"_"+tender_id,1)
+                SeleniumScrappingUtils.extract_horizontal_table(name, header_name + "_" + tender_id, 1)
+
         path_to_save = "concatinated_csvs/"
         try:
-            SeleniumScrappingUtils.concatinate_csvs(path_to_save,"summary"+"_"+tender_id, dict_tender_status[tender_status_id])
+            SeleniumScrappingUtils.concatinate_csvs(path_to_save, "summary_" + tender_id, dict_tender_status[tender_status_id])
         except:
             pass
 
-
-        
-    def get_table_links(browser,table_xpath):
-        #pdb.set_trace()
-
-        try:
-            table = SeleniumScrappingUtils.get_page_element(browser,table_xpath)
-        except TimeoutException:
-            debug_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_no_table.png")
-            browser.save_screenshot(debug_path)
-            print(f"Could not find table at {table_xpath}. Page screenshot saved to {debug_path}")
-            print("Page text snippet:", browser.find_element(By.TAG_NAME, "body").text[:500])
-            raise
-        elements_list = table.find_elements(By.CSS_SELECTOR,"a")
+    def get_table_links(browser, table_xpath):
+        table = SeleniumScrappingUtils.get_page_element(browser, table_xpath)
+        elements_list = table.find_elements(By.CSS_SELECTOR, "a")
         links = [element.get_attribute("href") for element in elements_list]
-        rows = table.find_elements(By.CSS_SELECTOR,"tr")
-        tender_ids = [row.find_element("xpath","td[2]").text for row in rows[1:-2]]
+        rows = table.find_elements(By.CSS_SELECTOR, "tr")
+        tender_ids = [row.find_element("xpath", "td[2]").text for row in rows[1:-2]]
         try:
-            next_page_link = table.find_elements("xpath",'//*[@id="loadNext"]')[0].get_attribute("href")
+            next_page_link = table.find_elements("xpath", '//*[@id="loadNext"]')[0].get_attribute("href")
         except:
             next_page_link = ''
-        return table,links,next_page_link,tender_ids
+        return table, links, next_page_link, tender_ids
 
-    def scrapeTender(browser,tender_ids,links,dict_tables_type,flag=None,):
-        #pdb.set_trace()
-        if (len(tender_ids) == 10)&(len(links)==10):
+    def scrapeTender(browser, tender_ids, links, dict_tables_type, flag=None):
+        if (len(tender_ids) == 10) & (len(links) == 10):
             pass
         else:
             links = links[:len(tender_ids)]
-        #pdb.set_trace()
-        for index,link in enumerate(links):
-            if glob.glob("{}/final_{}*".format(folder, tender_ids[index])):
-                print(f"Skipping {tender_ids[index]} — already scraped")
-                continue
+
+        for index, link in enumerate(links):
             browser.get(link)
-            scrape_view_more_details(browser,tender_ids[index])
-            scrape_view_stage_summary(browser,tender_ids[index],dict_tables_type)
+            scrape_view_more_details(browser, tender_ids[index])
+            scrape_view_stage_summary(browser, tender_ids[index], dict_tables_type)
 
             os.chdir("concatinated_csvs/")
-            SeleniumScrappingUtils.concatinate_csvs("../{}/".format(folder),"final_"+tender_ids[index], dict_tender_status[tender_status_id])
+            SeleniumScrappingUtils.concatinate_csvs("../{}/".format(folder), "final_" + tender_ids[index], dict_tender_status[tender_status_id])
             directory = os.getcwd()
             SeleniumScrappingUtils.remove_csvs(directory)
             os.chdir("../")
             directory = os.getcwd()
             SeleniumScrappingUtils.remove_csvs(directory)
-        # SeleniumScrappingUtils.get_page_element(browser,'//*[@id="PageLink_20"]').click()
 
     if __name__ == "__main__":
-            tender_ids_list = []
-            table,links,next_page_link,tender_ids = get_table_links(browser,'//*[@id="tabList"]')
-            scrapeTender(browser,tender_ids,links,dict_tables_type,"first")
-            # try:
-            #     scrapeTender(browser,tender_ids,links,dict_tables_type,"first")
-            # except:
-            #     print('Error1')
-            #     pdb.set_trace()
-            #     pass
-            while len(next_page_link):
-                print("next")
-                browser.get(next_page_link)
-                table,links,next_page_link,tender_ids = get_table_links(browser,'//*[@id="tabList"]')
-                scrapeTender(browser,tender_ids,links,dict_tables_type)
-                # try:
-                #     scrapeTender(browser,tender_ids,links,dict_tables_type)
-                # except:
-                #     print('Error2')
-                #     pdb.set_trace()
-                #     pass
-            browser.quit()
+        tender_ids_list = []
+        table, links, next_page_link, tender_ids = get_table_links(browser, '//*[@id="tabList"]')
+        scrapeTender(browser, tender_ids, links, dict_tables_type, "first")
+        while len(next_page_link):
+            print("next")
+            browser.get(next_page_link)
+            table, links, next_page_link, tender_ids = get_table_links(browser, '//*[@id="tabList"]')
+            scrapeTender(browser, tender_ids, links, dict_tables_type)
+        browser.quit()

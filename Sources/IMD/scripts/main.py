@@ -1,7 +1,6 @@
 import os
 import sys
 from datetime import datetime
-
 import geopandas as gpd
 import imdlib as imd
 import numpy as np
@@ -18,7 +17,7 @@ DATA_FOLDER = os.path.abspath(CURRENT_FOLDER + "/../" + "data")
 TIFF_DATA_FOLDER = os.path.join(DATA_FOLDER, "rain", "tiff")
 CSV_DATA_FOLDER = os.path.join(DATA_FOLDER, "rain", "csv")
 
-ADMIN_BDRY_GDF = gpd.read_file(path + "<administrative_boundary_shapefile_path>")
+ADMIN_BDRY_GDF = gpd.read_file(path + "/Maps/od_ids-drr_shapefiles/odisha_block_final.geojson")
 
 
 def download_data(year: int, start_date: str, end_date: str):
@@ -86,11 +85,11 @@ def transform_resample_monthly_tif_filenames(tif_filename: str):
         dst.write(reversed_data, 1)
 
     os.system(
-        """gdalwarp -tr 0.01 -0.01 -r sum {} {} -co COMPRESS=DEFLATE""".format(
-            tif_filename.replace(".tif", "_flipped.tif"),
-            tif_filename.replace(".tif", "_resampled.tif"),
-        )
+    """gdalwarp -overwrite -tr 0.01 -0.01 -r sum {} {} -co COMPRESS=DEFLATE""".format(
+        tif_filename.replace(".tif", "_flipped.tif"),
+        tif_filename.replace(".tif", "_resampled.tif"),
     )
+)
 
     # Divide each pixel by 625 to maintain overall sum_rainfall (625 small pixels = 1 big pixel based on our ts and tr)
     os.system(
@@ -154,9 +153,9 @@ def parse_and_format_data(year: int, start_date: str, end_date: str):
     return None
 
 
-def retrieve_assam_revenue_circle_data(year: int):
+def retrieve_subdistrict_data(year: int):
     """
-    Retrives assam revenue circle data from the year wise .tif file
+    Retrives subdistrict data from the year wise .tif file
     """
     for month in [
         "01",
@@ -170,14 +169,14 @@ def retrieve_assam_revenue_circle_data(year: int):
         "09",
         "10",
         "11",
-        "12",
+        "12"
     ]:
         month_and_year_filename = "{}_{}".format(str(year), str(month))
         try:
             raster = rasterio.open(
                 os.path.join(
                     TIFF_DATA_FOLDER,
-                    "{}_resampled2.tif".format(month_and_year_filename),
+                    "{}_resampled.tif".format(month_and_year_filename),
                 )
             )
             print(f"Processing for {month_and_year_filename}")
@@ -198,8 +197,8 @@ def retrieve_assam_revenue_circle_data(year: int):
 
         dfs = []
 
-        for revenue_circle in mean_dicts:
-            dfs.append(pd.DataFrame([revenue_circle["properties"]]))
+        for subdistrict in mean_dicts:
+            dfs.append(pd.DataFrame([subdistrict["properties"]]))
 
         zonal_stats_df = pd.concat(dfs).reset_index(drop=True)
 
@@ -213,15 +212,21 @@ def retrieve_assam_revenue_circle_data(year: int):
 
 
 if __name__ == "__main__":
-
     # Takes year as an input from the cli
-    year = str(sys.argv[1])
-    year = int(year)
+    year = int(input("Enter the year: "))
 
     # IF the year is current year, specify start and end date
-    start_date = "2024-01-01"
-    end_date = "2024-06-30"
+    now = datetime.now()
+
+    if year == now.year:
+        start_date = input("Enter start date (YYYY-MM-DD): ")
+        end_date = input("Enter end date (YYYY-MM-DD): ")
+    else:
+        # For historical years, these will be ignored by the functions
+        start_date = f"{year}-05-01"
+        end_date = f"{year}-05-31"
+
 
     download_data(year, start_date=start_date, end_date=end_date)
     parse_and_format_data(year, start_date=start_date, end_date=end_date)
-    retrieve_assam_revenue_circle_data(year)
+    retrieve_subdistrict_data(year)

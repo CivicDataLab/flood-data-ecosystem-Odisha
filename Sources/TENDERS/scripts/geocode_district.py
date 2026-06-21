@@ -4,11 +4,11 @@ import re
 import os
 from difflib import SequenceMatcher
 
-tenders_df = pd.read_csv(os.getcwd()+r'\flood-data-ecosystem-Odisha\Sources\TENDERS\data\flood_tenders_all.csv')
+tenders_df = pd.read_csv(os.getcwd()+'/Sources/TENDERS/data/flood_tenders_all.csv')
 
 #HP_VILLAGES = gpd.read_file(os.getcwd()+'/Maps/assam_village_complete_with_revenueCircle_district_35_oct2022.geojson',
  #                              driver='GeoJSON')
-OD_VILLAGES = pd.read_csv(os.getcwd()+r'\flood-data-ecosystem-Odisha\Maps\Geojson\ODISHA_VILLAGES_MASTER.csv', encoding='utf-8').dropna()
+OD_VILLAGES = pd.read_csv(os.getcwd()+'/Maps/od_ids-drr_shapefiles/ODISHA_VILLAGES_MASTER.csv', encoding='utf-8').dropna()
 
 #Clean village names
 od_villages = OD_VILLAGES["vilnam_soi"]
@@ -253,7 +253,7 @@ for idx, row in tenders_df.iterrows():
     
     tenders_df.loc[idx,'DISTRICT_FINALISED'] = DISTRICT_SELECTED
 
-tenders_df.to_csv(os.getcwd()+'/flood-data-ecosystem-Odisha/Sources/TENDERS/data/floodtenders_districtgeotagged.csv',index=False)
+tenders_df.to_csv(os.getcwd()+'/Sources/TENDERS/data/floodtenders_districtgeotagged.csv',index=False)
 
 print('Total number of flood related tenders: ', tenders_df.shape[0])
 print('Number of tenders whose district could not be geo-tagged: ',tenders_df[tenders_df['DISTRICT_FINALISED']=='NA'].shape[0])

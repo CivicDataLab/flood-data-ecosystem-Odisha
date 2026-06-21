@@ -25,13 +25,13 @@ def keep_columns_in_csv(input_folder, output_folder, columns_to_keep):
 
 
 # Specify the input folder containing the CSV files
-input_folder = "path/to/your/input/folder"
+input_folder = "Sources/IMD/data/rain/csv"
 
 # Specify the output folder where the modified CSV files will be saved
-output_folder = "path/to/your/output/folder"
+output_folder = "Sources/IMD/data/rain/csv"
 
 # Specify the columns to keep
-columns_to_keep = ["id", "max", "mean", "count", "sum"]
+columns_to_keep = ["object_id", "max", "mean", "count", "sum"]
 
 # Call the function
 keep_columns_in_csv(input_folder, output_folder, columns_to_keep)
