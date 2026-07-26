@@ -10,7 +10,7 @@ path = os.getcwd() + "/Sources/BHUVAN/"
 
 date_strings = [
         #2025
-
+    
     ]  # Sample date for assam - "2023_07_07_18"
 
 # Specify the state information to scrape data for.
