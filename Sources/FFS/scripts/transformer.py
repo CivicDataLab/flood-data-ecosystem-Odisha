@@ -9,7 +9,7 @@ ffs_df = pd.read_csv(path + "/Sources/FFS/data/scraped_data.csv")
 ffs_df["year_month"] = ffs_df.Date.str[:4] + "_" + ffs_df.Date.str[5:7]
 
 stations_file = gpd.read_file(path + "/Sources/FFS/data/state_stations.geojson")
-state_shpfile = gpd.read_file(path + "/Maps/subdistrict/subdistricts_479_osm.shp")
+state_shpfile = gpd.read_file(path + "/Maps/Geojson/subdistricts_479_odisha_osm.geojson")
 
 result = gpd.sjoin(
     stations_file[["stationCode", "geometry"]],
