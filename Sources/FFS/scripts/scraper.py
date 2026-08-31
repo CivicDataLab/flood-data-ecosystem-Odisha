@@ -11,8 +11,8 @@ path = os.getcwd() + "/Sources/FFS"
 
 stations_gdf = gpd.read_file(path + "/data/state_stations.geojson")
 
-startDate = "2024-05-01"
-endDate = "2026-06-30"
+startDate = "2026-07-01"
+endDate = "2026-08-30"
 
 master_df = pd.read_csv(path + "/data/station_more_details.csv")
 for stationCode in list(stations_gdf.stationCode):
