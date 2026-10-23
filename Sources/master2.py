@@ -28,7 +28,7 @@ SHAPEFILE_PATH = (
     'Maps/od_ids-drr_shapefiles/odisha_block_final.geojson'
 )
 
-DATE_RANGE = pd.date_range(start="2021-04-01", end="2026-08-30", freq='MS')
+DATE_RANGE = pd.date_range(start="2021-04-01", end="2026-09-30", freq='MS')
 TIMEPERIODS = [d.strftime('%Y_%m') for d in DATE_RANGE]
 
 MONTHLY_VARIABLES = [
