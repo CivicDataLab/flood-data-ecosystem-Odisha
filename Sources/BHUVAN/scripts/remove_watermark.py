@@ -1,11 +1,15 @@
 import glob
 import os
 
+import numpy as np
 import rasterio
 from rasterio.crs import CRS
 
 path = os.getcwd() + "/Sources/BHUVAN"
 print("Base path: ", path)
+
+os.makedirs(path + "/data/tiffs/removed_watermarks", exist_ok=True)
+
 files = glob.glob(path + "/data/tiffs/*.tif")
 print("Files with watermark: ", len(files))
 
@@ -13,8 +17,6 @@ wm_removed_files = glob.glob(path + "/data/tiffs/removed_watermarks/*.tif")
 print("Files without watermark: ", len(wm_removed_files))
 
 dates_watermark_removed = []
-
-
 for file in wm_removed_files:
     dates_watermark_removed.append(file.split(r"/")[-1].split("_w")[0])
 
@@ -22,28 +24,32 @@ for file in files:
     date_string = file.split(r"/")[-1][:-4]
     if date_string in dates_watermark_removed:
         continue
-    print(date_string)
+    print(f"Processing: {date_string}")
 
-    raster = rasterio.open(file)
-    image1_ar = raster.read()
+    with rasterio.open(file) as raster:
+        image1_ar = raster.read()
+        meta = raster.meta.copy()
 
-    # If Band4 is 255 it is definitely a inundated pixel based on observation
-    image1_ar[3, :, :][(image1_ar[3, :, :] < 255.0)] = 0
-    image1_ar[3, :, :][(image1_ar[3, :, :] == 255.0)] = 1
+    a4 = image1_ar[3, :, :]
 
-    meta = raster.meta
-    meta["compress"] = "deflate"
-    meta["count"] = 1  # Only one band.
-    meta["dtype"] = "uint8"
-    meta["crs"] = CRS.from_epsg(4326)
-    meta["transform"] = raster.transform
+    # Odisha: flood = band4 > 0 (max is 157, no watermark at 255)
+    flood_mask = (a4 > 0).astype("uint8")
 
-    # Save the modified raster data to a new TIF file.
-    # Band 4 is enough to identify inundation.
-    with rasterio.open(
-        path
-        + "/data/tiffs/removed_watermarks/{}_watermarkremoved.tif".format(date_string),
-        "w",
-        **meta,
-    ) as dst:
-        dst.write(image1_ar[3, :, :], 1)
+    nonzero = np.count_nonzero(flood_mask)
+    print(f"  Flood pixels detected: {nonzero}")
+
+    meta.update({
+        "compress": "deflate",
+        "count": 1,
+        "dtype": "uint8",
+        "crs": CRS.from_epsg(4326),
+        "nodata": 0,
+    })
+
+    output_path = path + f"/data/tiffs/removed_watermarks/{date_string}_watermarkremoved.tif"
+    with rasterio.open(output_path, "w", **meta) as dst:
+        dst.write(flood_mask, 1)
+
+    print(f"  Saved: {output_path}")
+
+print("\nDone.")
