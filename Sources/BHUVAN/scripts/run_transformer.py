@@ -13,7 +13,7 @@ for year in [2026]:
     print(f"\nYear: {year}")
     year = str(year)
 
-    for month in ["09"]:
+    for month in ["10"]:
         files = glob.glob(
             path + f"data/tiffs/removed_watermarks/{year}_??_{month}_??_watermarkremoved.tif"
         )
